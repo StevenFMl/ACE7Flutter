@@ -8,7 +8,7 @@ import 'dart:ui';
 class LoginView extends StatelessWidget {
   final TextEditingController cedulaController;
   final TextEditingController claveController;
-   final VoidCallback? onLogin; // Cambiar a VoidCallback?
+  final VoidCallback? onLogin; // Cambiar a VoidCallback?
 
   const LoginView({
     super.key,
@@ -97,7 +97,7 @@ class LoginView extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       // Add forgot password functionality
-                       Navigator.pushNamed(context, '/restorepassword'); // Navega a la vista de recuperación de contraseña
+                      Navigator.pushNamed(context, '/restorepassword'); // Navega a la vista de recuperación de contraseña
                     },
                     child: const Text(
                       '¿OLVIDÉ MI CONTRASEÑA?',
@@ -105,13 +105,19 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                   child: Row(
+                  InkWell(
+                    onTap: () {
+                      // Aquí puedes agregar la lógica para registrar al usuario
+                      Navigator.pushNamed(context, '/registro'); // Navega a la vista de registro
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const FaIcon(
@@ -127,16 +133,16 @@ class LoginView extends StatelessWidget {
                         ],
                       ),
                     ),
-                
+                  ),
                   const SizedBox(height: 48),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SocialIcon(icon: FontAwesomeIcons.facebookF, url: 'https://www.facebook.com/GadIbarra'),
+                      SocialIcon(icon: FontAwesomeIcons.facebookF, url: 'https://www.facebook.com/AlcaldiaIbarra/?locale=es_LA'),
                       const SizedBox(width: 24),
-                      SocialIcon(icon: FontAwesomeIcons.instagram, url: 'https://www.instagram.com/gadibarra'),
+                      SocialIcon(icon: FontAwesomeIcons.instagram, url: 'https://www.instagram.com/alcaldiaibarra/?hl=es'),
                       const SizedBox(width: 24),
-                      SocialIcon(icon: FontAwesomeIcons.twitter, url: 'https://twitter.com/gadibarra'),
+                      SocialIcon(icon: FontAwesomeIcons.twitter, url: 'https://x.com/alcaldiaibarra?lang=es'),
                     ],
                   ),
                   const SizedBox(height: 24),

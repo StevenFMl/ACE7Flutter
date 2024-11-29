@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Messages {
-  static void showToast(String msg, {Color backgroundColor = Colors.black, Color textColor = Colors.white}) {
+  static void showToast(String msg, {Color backgroundColor = const Color.fromARGB(255, 0, 0, 0), Color textColor = const Color.fromARGB(255, 255, 255, 255)}) {
     Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
@@ -25,4 +25,41 @@ class Messages {
       ),
     );
   }
+
+  // Método para mostrar un toast de éxito
+  static void showSuccessToast(String msg) {
+    showToast(
+      msg,
+      backgroundColor: Colors.green, // Color verde para éxito
+      textColor: Colors.white,
+    );
+  }
+
+  // Método para mostrar un toast de error
+  static void showErrorToast(String msg) {
+    showToast(
+      msg,
+      backgroundColor: Colors.red, // Color rojo para error
+      textColor: Colors.white,
+    );
+  }
+
+  // Método para mostrar un snackbar de éxito
+  static void showSuccessSnackBar(BuildContext context, String msg) {
+    showSnackBar(
+      context,
+      msg,
+      backgroundColor: Colors.green, // Color verde para éxito
+    );
+  }
+
+  // Método para mostrar un snackbar de error
+  static void showErrorSnackBar(BuildContext context, String msg) {
+    showSnackBar(
+      context,
+      msg,
+      backgroundColor: Colors.red, // Color rojo para error
+    );
+  }
+  
 }

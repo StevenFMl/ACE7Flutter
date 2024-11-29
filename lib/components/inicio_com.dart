@@ -35,8 +35,8 @@ class WelcomeLogo extends StatelessWidget {
             ClipOval(
               child: Image.asset(
                 'assets/LOGO.png',
-                width: 100,
-                height: 100,
+                width: 200,
+                height: 200,
                 fit: BoxFit.cover,
               ),
             ),

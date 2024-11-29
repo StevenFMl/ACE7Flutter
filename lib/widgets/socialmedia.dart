@@ -30,7 +30,7 @@ class SocialIcon extends StatelessWidget {
           color: Colors.black,
           shape: BoxShape.circle,
         ),
-        child: FaIcon(icon, color: Colors.white, size: 20),
+        child: FaIcon(icon, color: Colors.white, size: 25),
       ),
     );
   }
