@@ -1,3 +1,4 @@
+import 'package:ace/components/inicio_com.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildLogo(),
+                 const WelcomeLogo(),
                 const SizedBox(height: 24),
                 const Text(
                   '¡Bienvenido a ACE 7!',
@@ -152,45 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _buildLogo() {
-    return Container(
-      width: 150,
-      height: 150,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        shape: BoxShape.circle,
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Text(
-            '7',
-            style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Icon(Icons.calculate, color: Colors.white, size: 24),
-          ),
-          Positioned(
-            top: 20,
-            right: 20,
-            child: Icon(Icons.attach_money, color: Colors.white, size: 24),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: Icon(Icons.bar_chart, color: Colors.white, size: 24),
-          ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: Icon(Icons.account_balance, color: Colors.white, size: 24),
-          ),
-        ],
-      ),
-    );
-  }
+  
 
   Widget _buildDropdownField(String label, IconData icon, List<String> items, Function(String?) onChanged) {
     return Padding(
