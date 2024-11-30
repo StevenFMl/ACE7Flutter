@@ -29,7 +29,7 @@ class _RegistroComState extends State<RegistroCom> {
     final String cedula = cedulaController.text;
     final String nombre = nombreController.text;
     final String apellido = apellidoController.text;
-    final String fechaNacimiento = fechaNacimientoController.text;
+    final String fecha_nacimiento = fechaNacimientoController.text;
     final String ecivil = ecivilController.text;
     final String etnia = etniaController.text;
     final String discapacidad = discapacidadController.text;
@@ -38,7 +38,7 @@ class _RegistroComState extends State<RegistroCom> {
     final String telefono = telefonoController.text;
     final String clave = claveController.text;
 
-    if (cedula.isEmpty || nombre.isEmpty || apellido.isEmpty || fechaNacimiento.isEmpty || ecivil.isEmpty || etnia.isEmpty || discapacidad.isEmpty || ocupacion.isEmpty || correo.isEmpty || telefono.isEmpty || clave.isEmpty) {
+    if (cedula.isEmpty || nombre.isEmpty || apellido.isEmpty || fecha_nacimiento.isEmpty || ecivil.isEmpty || etnia.isEmpty || discapacidad.isEmpty || ocupacion.isEmpty || correo.isEmpty || telefono.isEmpty || clave.isEmpty) {
       Messages.showToast("Por favor, completa todos los campos.", backgroundColor: Colors.red);
       return;
     }
@@ -53,20 +53,28 @@ class _RegistroComState extends State<RegistroCom> {
         tipoced: 1, // Puedes reemplazar por el valor correcto
         nombre: nombre,
         apellido: apellido,
-        fechaNacimiento: fechaNacimiento,
+        fecha_nacimiento: fecha_nacimiento,
         ecivil: ecivil,
         etnia: etnia,
         discapacidad: discapacidad,
         ocupacion: ocupacion,
+        tipodis: tipodis,
+        porcentajedis: porcentajedis,
+        ncarnetdis: ncarnetdis,
+        ocupacion: ocupacion,
         nacionalidad: 1, // Puedes reemplazar por el valor correcto
         ciudad: 1, // Puedes reemplazar por el valor correcto
         provincia: 1, // Puedes reemplazar por el valor correcto
+        parroquia: 1,
+        barrio: 1, // Puedes reemplazar por el valor correcto
         calle1: 'Calle1', // Puedes ajustar según el formulario
+        calle2: 'Calle2', // Puedes ajustar según el formulario
         neducacion: 'Secundaria', // Puedes ajustar según el formulario
         genero: 'Masculino', // Puedes ajustar según el formulario
         correo: correo,
         telefono: telefono,
         clave: clave,
+        check_terminos: check_terminos,
       );
 
       if (response['estado']) {

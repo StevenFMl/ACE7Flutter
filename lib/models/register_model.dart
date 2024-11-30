@@ -11,7 +11,7 @@ class RegistroModel {
     required int tipoced,
     required String nombre,
     required String apellido,
-    required String fechaNacimiento,
+    required String fecha_nacimiento,
     required String ecivil,
     required String etnia,
     required String discapacidad,
@@ -31,6 +31,7 @@ class RegistroModel {
     required String correo,
     required String telefono,
     required String clave,
+    required bool check_terminos,
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/registro-usuario'),
@@ -42,7 +43,7 @@ class RegistroModel {
         'tipoced': tipoced,
         'nombre': nombre,
         'apellido': apellido,
-        'fecha_nacimiento': fechaNacimiento,
+        'fecha_nacimiento': fecha_nacimiento,
         'ecivil': ecivil,
         'etnia': etnia,
         'discapacidad': discapacidad,
