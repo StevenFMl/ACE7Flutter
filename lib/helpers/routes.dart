@@ -1,3 +1,4 @@
+import 'package:ace/views/home_view.dart';
 import 'package:ace/views/newpassword.dart';
 import 'package:ace/views/register_view.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => NewpasswordScreen(token: token)); // Pasamos el token
         case '/registro':
         return MaterialPageRoute(builder: (_) => const RegistrationScreen());
+        case '/home':
+        return MaterialPageRoute(builder: (_) => const HomeScreen ());
       default:
-        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
     }
   }
 }

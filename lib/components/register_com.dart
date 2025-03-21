@@ -1,6 +1,7 @@
-import 'package:ace/models/register_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ace/models/register_model.dart';
 import '../widgets/menssage.dart';
 
 class RegistroCom extends StatefulWidget {
@@ -9,65 +10,98 @@ class RegistroCom extends StatefulWidget {
 }
 
 class _RegistroComState extends State<RegistroCom> {
-  final TextEditingController cedulaController = TextEditingController();
-  final TextEditingController nombreController = TextEditingController();
-  final TextEditingController apellidoController = TextEditingController();
-  final TextEditingController fechaNacimientoController = TextEditingController();
-  final TextEditingController ecivilController = TextEditingController();
-  final TextEditingController etniaController = TextEditingController();
-  final TextEditingController discapacidadController = TextEditingController();
-  final TextEditingController ocupacionController = TextEditingController();
-  final TextEditingController correoController = TextEditingController();
-  final TextEditingController telefonoController = TextEditingController();
-  final TextEditingController claveController = TextEditingController();
-
-  final RegistroModel registroModel = RegistroModel(baseUrl: 'http://10.0.2.2:8000/api/'); // Cambia a la URL de tu API
-
+  final _formKey = GlobalKey<FormState>();
+  final RegistroModel registroModel = RegistroModel(baseUrl: 'http://10.0.2.2:8000/api/registrar-usuario');
+  
   bool isLoading = false;
+  bool checkTerminos = false;
+
+  final Map<String, TextEditingController> controllers = {
+    'cedula': TextEditingController(),
+    'nombre': TextEditingController(),
+    'apellido': TextEditingController(),
+    'fechaNacimiento': TextEditingController(),
+    'ecivil': TextEditingController(),
+    'etnia': TextEditingController(),
+    'discapacidad': TextEditingController(),
+    'ocupacion': TextEditingController(),
+    'correo': TextEditingController(),
+    'telefono': TextEditingController(),
+    'clave': TextEditingController(),
+    'tipodis': TextEditingController(),
+    'porcentajedis': TextEditingController(),
+    'ncarnetdis': TextEditingController(),
+    'parroquia': TextEditingController(),
+    'barrio': TextEditingController(),
+    'calle1': TextEditingController(),
+    'calle2': TextEditingController(),
+    'neducacion': TextEditingController(),
+    'genero': TextEditingController(),
+  };
+  List<Map<String, dynamic>> nacionalidades = [];
+  List<Map<String, dynamic>> ciudades = [];
+  List<Map<String, dynamic>> provincias = [];
+  int? selectedNacionalidad;
+  int? selectedCiudad;
+  int? selectedProvincia;
+@override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final nacionalidadesData = await registroModel.fetchNacionalidades();
+      final ciudadesData = await registroModel.fetchCiudades();
+      final provinciasData = await registroModel.fetchProvincias();
+
+      setState(() {
+        nacionalidades = nacionalidadesData;
+        ciudades = ciudadesData;
+        provincias = provinciasData;
+      });
+    } catch (e) {
+      Messages.showSnackBar(context, 'Error al cargar los datos: $e');
+    }
+  }
 
   void onRegister() async {
-    final String cedula = cedulaController.text;
-    final String nombre = nombreController.text;
-    final String apellido = apellidoController.text;
-    final String fechaNacimiento = fechaNacimientoController.text;
-    final String ecivil = ecivilController.text;
-    final String etnia = etniaController.text;
-    final String discapacidad = discapacidadController.text;
-    final String ocupacion = ocupacionController.text;
-    final String correo = correoController.text;
-    final String telefono = telefonoController.text;
-    final String clave = claveController.text;
-
-    if (cedula.isEmpty || nombre.isEmpty || apellido.isEmpty || fechaNacimiento.isEmpty || ecivil.isEmpty || etnia.isEmpty || discapacidad.isEmpty || ocupacion.isEmpty || correo.isEmpty || telefono.isEmpty || clave.isEmpty) {
-      Messages.showToast("Por favor, completa todos los campos.", backgroundColor: Colors.red);
+    if (!_formKey.currentState!.validate() || !checkTerminos) {
+      Messages.showToast("Por favor, completa los campos correctamente y acepta los términos.", backgroundColor: Colors.red);
       return;
     }
-
-    setState(() {
-      isLoading = true; // Iniciar carga
-    });
-
+    
+    setState(() => isLoading = true);
     try {
       final response = await registroModel.registrarUsuario(
-        cedula: cedula,
-        tipoced: 1, // Puedes reemplazar por el valor correcto
-        nombre: nombre,
-        apellido: apellido,
-        fechaNacimiento: fechaNacimiento,
-        ecivil: ecivil,
-        etnia: etnia,
-        discapacidad: discapacidad,
-        ocupacion: ocupacion,
-        nacionalidad: 1, // Puedes reemplazar por el valor correcto
-        ciudad: 1, // Puedes reemplazar por el valor correcto
-        provincia: 1, // Puedes reemplazar por el valor correcto
-        calle1: 'Calle1', // Puedes ajustar según el formulario
-        neducacion: 'Secundaria', // Puedes ajustar según el formulario
-        genero: 'Masculino', // Puedes ajustar según el formulario
-        correo: correo,
-        telefono: telefono,
-        clave: clave,
+        cedula: controllers['cedula']!.text,
+        tipoced: 1,
+        nombre: controllers['nombre']!.text,
+        apellido: controllers['apellido']!.text,
+        fechaNacimiento: controllers['fechaNacimiento']!.text,
+        ecivil: controllers['ecivil']!.text,
+        etnia: controllers['etnia']!.text,
+        discapacidad: controllers['discapacidad']!.text,
+        tipodis: controllers['tipodis']!.text,
+        porcentajedis: int.tryParse(controllers['porcentajedis']!.text),
+        ncarnetdis: controllers['ncarnetdis']!.text,
+        ocupacion: controllers['ocupacion']!.text,
+        nacionalidad: selectedNacionalidad ?? 1,
+        ciudad: selectedCiudad ?? 1,
+        provincia: selectedProvincia ?? 1,
+        parroquia: controllers['parroquia']!.text,
+        barrio: controllers['barrio']!.text,
+        calle1: controllers['calle1']!.text,
+        calle2: controllers['calle2']!.text,
+        neducacion: controllers['neducacion']!.text,
+        genero: controllers['genero']!.text,
+        correo: controllers['correo']!.text,
+        telefono: controllers['telefono']!.text,
+        clave: controllers['clave']!.text,
+        check_terminos: checkTerminos,
       );
+      
 
       if (response['estado']) {
         Messages.showToast("Registro exitoso.", backgroundColor: Colors.green);
@@ -78,12 +112,9 @@ class _RegistroComState extends State<RegistroCom> {
     } catch (e) {
       Messages.showSnackBar(context, 'Error: $e');
     } finally {
-      setState(() {
-        isLoading = false; // Detener carga
-      });
+      setState(() => isLoading = false);
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -91,25 +122,76 @@ class _RegistroComState extends State<RegistroCom> {
       appBar: AppBar(title: Text('Registro de Usuario')),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(controller: cedulaController, decoration: InputDecoration(labelText: 'Cédula')),
-            TextField(controller: nombreController, decoration: InputDecoration(labelText: 'Nombre')),
-            TextField(controller: apellidoController, decoration: InputDecoration(labelText: 'Apellido')),
-            TextField(controller: fechaNacimientoController, decoration: InputDecoration(labelText: 'Fecha de Nacimiento')),
-            TextField(controller: ecivilController, decoration: InputDecoration(labelText: 'Estado Civil')),
-            TextField(controller: etniaController, decoration: InputDecoration(labelText: 'Etnia')),
-            TextField(controller: discapacidadController, decoration: InputDecoration(labelText: 'Discapacidad')),
-            TextField(controller: ocupacionController, decoration: InputDecoration(labelText: 'Ocupación')),
-            TextField(controller: correoController, decoration: InputDecoration(labelText: 'Correo')),
-            TextField(controller: telefonoController, decoration: InputDecoration(labelText: 'Teléfono')),
-            TextField(controller: claveController, decoration: InputDecoration(labelText: 'Contraseña'), obscureText: true),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: isLoading ? null : onRegister,
-              child: isLoading ? CircularProgressIndicator() : Text('Registrarse'),
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              DropdownButtonFormField<int>(
+                value: selectedNacionalidad,
+                items: nacionalidades.map((n) {
+                  return DropdownMenuItem<int>(
+                    value: n['id'],
+                    child: Text(n['nombre']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedNacionalidad = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Nacionalidad'),
+              ),
+              DropdownButtonFormField<int>(
+                value: selectedProvincia,
+                items: provincias.map((p) {
+                  return DropdownMenuItem<int>(
+                    value: p['cod_provincia'],
+                    child: Text(p['nombre_provincia']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedProvincia = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Provincia'),
+              ),
+              DropdownButtonFormField<int>(
+                value: selectedCiudad,
+                items: ciudades.map((c) {
+                  return DropdownMenuItem<int>(
+                    value: c['cod_ciudad'],
+                    child: Text(c['nombre_ciudad']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCiudad = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Ciudad'),
+              ),
+              ...controllers.entries.map((entry) => TextFormField(
+                    controller: entry.value,
+                    decoration: InputDecoration(labelText: entry.key.replaceAll(RegExp(r"([A-Z])"), " \$1")),
+                    validator: (value) => value!.isEmpty ? 'Este campo es obligatorio' : null,
+                  )),
+              Row(
+                children: [
+                  Checkbox(
+                    value: checkTerminos,
+                    onChanged: (value) => setState(() => checkTerminos = value!),
+                  ),
+                  Text('Acepto los términos y condiciones')
+                ],
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: isLoading ? null : onRegister,
+                child: isLoading ? CircularProgressIndicator() : Text('Registrarse'),
+              ),
+            ],
+          ),
         ),
       ),
     );

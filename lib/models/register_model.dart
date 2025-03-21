@@ -30,7 +30,8 @@ class RegistroModel {
     required String genero,
     required String correo,
     required String telefono,
-    required String clave,
+    required String clave, 
+    required bool check_terminos, // Recibe el valor desde el formulario
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/registro-usuario'),
@@ -62,7 +63,7 @@ class RegistroModel {
         'correo': correo,
         'telefono': telefono,
         'clave': clave,
-        'check_terminos': true, // Por defecto lo seteamos en true ya que es requerido
+        'check_terminos': check_terminos, // Usamos el valor pasado desde el formulario
       }),
     );
 
@@ -74,5 +75,40 @@ class RegistroModel {
         'mensaje': 'Error al registrar el usuario',
       };
     }
+  }
+  Future<List<Map<String, dynamic>>> fetchNacionalidades() async {
+    final response = await http.get(Uri.parse('$baseUrl/nacionalidades'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      if (jsonResponse['estado'] == true) {
+        return List<Map<String, dynamic>>.from(jsonResponse['datos']);
+      }
+    }
+    throw Exception('Error al obtener nacionalidades');
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCiudades() async {
+    final response = await http.get(Uri.parse('$baseUrl/ciudades'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      if (jsonResponse['estado'] == true) {
+        return List<Map<String, dynamic>>.from(jsonResponse['datos']);
+      }
+    }
+    throw Exception('Error al obtener ciudades');
+  }
+
+  Future<List<Map<String, dynamic>>> fetchProvincias() async {
+    final response = await http.get(Uri.parse('$baseUrl/provincias'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      if (jsonResponse['estado'] == true) {
+        return List<Map<String, dynamic>>.from(jsonResponse['datos']);
+      }
+    }
+    throw Exception('Error al obtener provincias');
   }
 }
